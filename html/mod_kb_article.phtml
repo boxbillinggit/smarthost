@@ -1,0 +1,51 @@
+{% extends request.ajax ? "layout_blank.phtml" : "layout_default.phtml" %}
+
+{% block meta_title %}{{article.title}}{% endblock %}
+
+{% block page_title_up %}{% trans 'Knowledge base' %} - {{article.title}}{% endblock %}
+
+{% block content %}
+<div class="content_left">
+
+<div class="our_support" style="width: 93% !important;">
+			<h2>{{article.title}}</h2>
+            <p class="meta">{{article.created_at|bb_date }} | {% trans 'Views' %}: {{ article.views }}</p>
+            <Br />
+            
+            <p>{{article.content|bbmd}}</p>
+            
+            <div style="clear:both;"></div>
+            <br>
+            
+            <p><a class="but_minus" href="{{ 'kb'|link }}"><span class="dark-icon i-arrow"></span> {% trans 'Back to list' %}</a></p>
+</div>
+
+    
+{% endblock %}
+
+{% block content_after %}
+<div style="clear:both;"><br></div>
+<div class="text">
+
+                <h2>{%trans 'Similiar articles' %}</h2>
+           
+            <ul class="arrows_list1">
+            {% for i, kbarticle in guest.kb_article_get_list({"kb_article_category_id":article.kb_article_category_id, "per_page":5}).list %}
+                <li><a href="{{ '/kb'|link }}/{{article.category.slug}}/{{kbarticle.slug}}">{{kbarticle.title|truncate(45)}}</a></li>
+            {% endfor %}
+            </ul>
+</div>
+
+<div class="text last">
+<h2>{%trans 'Knowledge base categories'%}</h2>
+            
+            <ul class="arrows_list1">
+            {% for i, category in guest.kb_category_get_list({"per_page":5}).list %}
+                <li><a href="{{ '/kb'|link }}#category-{{category.id}}">{{category.title}}</a></li>
+            {% endfor %}
+            </ul>
+
+</div>
+
+</div>
+{% endblock %}

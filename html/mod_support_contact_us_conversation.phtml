@@ -1,0 +1,176 @@
+{% extends request.ajax ? "layout_blank.phtml" : "layout_default_tab.phtml" %}
+{% import "macro_functions.phtml" as mf %}
+{% block meta_title %}{{ticket.subject}}{% endblock %}
+{% block page_title_up %}
+{{ticket.subject}}
+{% endblock %}
+
+{% block content %}
+
+<div class="text">
+        <h2>{% trans 'Ticket details' %}</h2>
+
+    <table width="100%">
+        <tbody>
+            <tr>
+                <td>{% trans 'Subject' %}</td>
+                <td><b>{{ticket.subject}}</b></td>
+            </tr>
+
+            <tr>
+                <td>{% trans 'Author' %}</td>
+                <td>{{ticket.author.name}}</td>
+            </tr>
+
+            <tr>
+                <td>{% trans 'Email' %}</td>
+                <td>{{ticket.author.email}}</td>
+            </tr>
+
+            <tr>
+                <td>{% trans 'Status' %}</td>
+                <td>{{mf.status_name(ticket.status) }}</td>
+            </tr>
+
+            <tr>
+                <td>{% trans 'Time opened' %}</td>
+                <td>{{ticket.created_at|bb_date }}</td>
+            </tr>
+         </tbody>
+         
+         {% if ticket.status != 'closed' %}
+         <tfoot>
+             <tr>
+                 <td colspan="2">
+                 <a href="guest/support/ticket_close?hash={{ticket.hash}}" class="small_btn-grn buy_now api-link" id="new-ticket-button" data-api-reload="1"><span class="small_blk-grn">{% trans 'Close ticket' %}</span></a>
+                 </td>
+             </tr>
+         </tfoot>
+         {% endif %}
+    </table>
+    <Br />
+</div>
+{% for i, message in ticket.messages %}
+<div id="features-toggle">
+   
+      <div class="left">
+        <ul>
+        <li class="features"><a name="m-{{message.id}}" class="selected" id="selected"><div class="icon1"></div><div class="text">{{ i+1 }}</div></a></li>
+        <li class="features"><a name="reply-{{message.id}}" class="" id=""><div class="icon2"></div><div class="text">{% trans 'Reply' %}</div></a></li>
+        <li class="features"><a name="quote-{{message.id}}" class="" id=""><div class="icon3"></div><div class="text">{% trans 'Quote' %}</div></a></li>
+        </ul>        
+      </div>
+          
+      <div class="right">
+		 <div id="m-{{message.id}}">
+        
+          <div class="detail">
+
+            <p style="float:left;">
+                <h1>Creative</h1>
+                {% trans 'Author' %} : {{ message.author.name }}<br>
+                {{ message.created_at|bb_date }}
+                {{ message.content|bbmd }}
+			</p>
+          </div>
+          </div>
+          
+          
+          <div id="reply-{{message.id}}" style="display: none;">
+        
+          <div class="detail form">
+
+            <p style="float:left;">
+                <h1>{% trans 'Reply' %}</h1>
+                <form method="post" action="" class="api_form" data-api-url="guest/support/ticket_reply" data-api-reload="1">
+					
+                    <div class="field">
+                    	<label></label>
+                        <textarea name="message" id="message" cols="" rows="" required style="height: 112px !important;"></textarea>
+                    </div>
+
+                        <input type="hidden" name="hash" value="{{ ticket.hash }}" />
+                        <input class="comment_submit" type="submit" value="">
+
+                </form>	
+			</p>
+            
+          </div>
+          <div style="clear:both"></div>
+          </div>
+          
+           <div id="quote-{{message.id}}" style="display: none;">
+        
+          <div class="detail form">
+
+            <p style="float:left;">
+                <h1>{% trans 'Quote' %}</h1>
+                <form method="post" action="" class="api_form" data-api-url="guest/support/ticket_reply" data-api-reload="1">
+					<div class="field">
+                    	<label></label>
+                        <textarea name="message" id="message" cols="" rows="" required style="height: 112px !important;">{{ mf.markdown_quote(message.content) }}</textarea>
+                    </div>
+                       
+                        <input type="hidden" name="hash" value="{{ ticket.hash }}" />
+                        <input class="comment_submit" type="submit" value="">
+
+                </form>	
+			</p>
+          </div>
+        
+        </div>
+        
+        
+        
+      </div>
+      
+    </div>
+
+ 			
+		
+            
+            
+
+      
+    {% endfor %}
+    </div>
+    </div>
+<div style="clear:both;"></div>
+</div>
+{% endblock %}
+
+
+{% block js %}
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#textExample").verticaltabs({speed: 500,slideShow: false,activeIndex: 2});
+		$("#imageExample").verticaltabs({speed: 1000,slideShow: true,slideShowSpeed: 3000,activeIndex: 0,playPausePos: "topRight"});
+	});
+</script>
+
+<script>
+$(document).ready(function(){
+  $('li.features a').click(function () {
+      var divname= this.name;
+      $("#"+divname).show(0).siblings().hide(0);
+      $('li.features a').removeClass('selected'); $(this).addClass('selected');
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(function() {
+    $('#public-ticket-reply').bind('submit',function(event){
+        bb.post(
+            'guest/support/ticket_reply',
+            $(this).serialize(),
+            function(result) {
+                bb.reload();
+            }
+        );
+        return false;
+    });
+});
+</script>
+{% endblock %}

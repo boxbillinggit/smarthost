@@ -1,0 +1,48 @@
+<div class="top_links">
+            <div class="container">
+            	
+			<div class="date_wrap">
+			<script type="text/javascript">
+            var mydate=new Date()
+            var year=mydate.getYear()
+            if (year < 1000)
+            year+=1900
+            var day=mydate.getDay()
+            var month=mydate.getMonth()
+            var daym=mydate.getDate()
+            if (daym<10)
+            daym="0"+daym
+            var montharray=new Array("January","February","March","April","May","June","July","August","September","October","November","December")
+            document.write("<b class='date'>"+montharray[month]+" "+daym+", "+year+"</b>")
+            </script>
+            </div><!-- end date -->
+            
+            <div class="top_contact_info">
+                    <ul class="tci_list">
+                    	{% if settings.live_chat_url == '' %} {% else %}<li class="chat"><a href="{{ settings.live_chat_url }}">live chat</a></li> {% endif %}
+                        {% if settings.email == '' %} {% else %}<li class="email"><a href="mailto:{{ settings.email }}">{{ settings.email }}</a></li>{% endif %}
+                        {% if settings.tel == '' %} {% else %}<li class="phone">{{ settings.tel }}</li>{% endif %}
+                        <li><a href="#">{{ 'images/top_si1.png' | asset_url | img_tag }}</a></li>
+                        <li><a href="#">{{ 'images/top_si2.png' | asset_url | img_tag }}</a></li>
+                        <li><a href="#">{{ 'images/top_si3.png' | asset_url | img_tag }}</a></li>
+                        <li><a href="#">{{ 'images/top_si4.png' | asset_url | img_tag }}</a></li>
+                        <li><a href="#">{{ 'images/top_si5.png' | asset_url | img_tag }}</a></li>
+                        
+                        {% set languages = guest.extension_languages %}
+                        {% if languages|length > 1 %}
+                        <li class="country"><a href="#">{% trans 'Language' %}:</a></li>
+                        <li class="country_select">
+                                <select name="lang" class="language_selector">
+                                {% for lang in languages %}
+                                    <option value="{{ lang }}" class="lang_{{ lang }}">{{ lang|trans }}</option>
+                                {% endfor %}
+                                </select>
+                        </li>
+                        {% endif %}
+                          
+                    </ul>
+            </div><!-- end top contact info -->
+                
+            
+            </div>
+    	</div><!-- end top links -->

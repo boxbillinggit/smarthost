@@ -1,0 +1,55 @@
+{% extends request.ajax ? "layout_blank.phtml" : "layout_default.phtml" %}
+
+{% block meta_title %}{%trans 'Knowledge base'%}{% endblock %}
+
+{% block page_title_up %}{% trans 'Knowledge base' %}{% endblock %}
+
+{% block content_top %}
+<div class="container">
+            <div class="domain">
+            	<span class="name">{% trans 'Search' %}</span>
+                <form method="get" id="form" action="{{ 'kb'|link }}">
+                <input name="q" type="text" value="{{ request.q }}" placeholder="{% trans 'What are you looking for?' %}">
+                <div class="domain_btns">
+                    <input type="submit" style="background: url({{ 'images/submit.png' | asset_url }}) no-repeat;width: 97px;height: 36px;border: none;cursor: pointer;float: left;margin: 10px 0 0 108px;padding-top:10px;" id="Submit" value="">
+                </div>
+                </form>
+            <div class="clear"></div>    
+            </div>
+        </div>
+{% endblock %}
+
+{% block content %}
+
+    {% if request.q %}
+        {% set kbcategories = guest.kb_category_get_list({"q": request.q}) %}
+    {% else %}
+        {% set kbcategories = guest.kb_category_get_list %}
+    {% endif %}
+            
+{% for i, category in kbcategories.list %}
+<div style="clear:both"></div>
+<br>
+<div class="our_support" style="width: 95% !important;">
+<h2 id="category-{{category.id}}"><a href="{{ 'kb'|link }}/{{ category.slug }}" style="color:#3b3b3b;">{{category.title}}</a></h2>
+				<div class="feature" style="margin:0 !important;">
+                    <ul>
+                        {% for i, article in category.articles %}
+                            <li><a href="{{ '/kb'|link }}/{{article.category.slug}}/{{article.slug}}">{{article.title}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+</div>
+
+    {% else %}
+        <p>
+            {% trans 'Try using other keyword. No matches not for keyword:' %}
+            <b>{{ request.q }}</b>
+        </p>
+    {% endfor %}
+    </div>
+
+
+
+{% endblock %}

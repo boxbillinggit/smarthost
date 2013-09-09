@@ -1,0 +1,242 @@
+{% extends request.ajax ? "layout_blank.phtml" : "layout_default.phtml" %}
+
+{% import "macro_functions.phtml" as mf %}
+
+{% block meta_title %}{% trans 'Login / Sign up' %}{% endblock %}
+
+{% block page_title_up %}
+<div class="page_title">
+
+	<div class="container">
+		<div class="leaft_title"><h1>{% trans 'Sign In / Create new account' %}</h1></div>
+        <div class="reght_pagenation">{% trans 'Become a member to participate in forum, contact support, order new services' %}</div>
+	</div>
+    
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="content_left">
+
+
+    <div class="h-block">
+
+        <div class="block" id="login-to-accounts" {% if request.register %}style="display:none;"{% endif %}>
+            <div class="splitter">
+            <div class="grid_6 alpha">
+                <div class="box" >
+                    <div class="block">
+                        <h3>{% trans 'Sign in' %}</h3>
+                        <form action="" method="post" id="client-login">
+                            <fieldset>
+                                <legend>{% trans 'Login to client area' %}</legend>
+                                
+                                <label for="name" class="blocklabel">{% trans 'Email Address' %}:</label>
+                           	    <p class=""><input name="email" class="input_bg" type="email" id="email" value="{{ request.email }}" required></p>
+
+								<label for="name" class="blocklabel">{% trans 'Password' %}:</label>
+                           	    <p class=""><input name="password" class="input_bg" type="password" value="{{ request.password }}" required></p>
+                                
+                                <input type="hidden" name="remember" value="1" />
+                                <div style="clear:both"></div>
+                                <br>
+                                <input name="Send" type="submit" value="{% trans 'Login' %}" class="comment_submit">
+                                <a class="bb-button" href="{{ 'reset-password'|link }}">{% trans 'Reset password' %}</a>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid_6 omega">
+                <div class="box" {% if request.register %}style="display:none;"{% endif %}>
+                <br>
+                    <h3>{% trans 'Do not have an account yet?' %}</h3>
+                    <div class="block">
+                        <a style="margin: 30px 0 0 0px;" class="bb-button bb-button-red bb-button-big comment_submit" href="#" onclick="$('#login-to-account').slideUp(); $('#register-new-account').slideDown(); return false;" >{% trans 'Register' %}</a>
+                    </div>
+                    <div style="clear:both"></div>
+                                <br>
+                    {% if guest.extension_is_on({"mod":"oauth"}) %}
+                        {% include "mod_oauth_buttons.phtml" with {"redirect_to":"me"} %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        </div>
+
+        <div class="block" id="register-new-account" {% if not request.register %}style="display:none;"{% endif %}>
+            <form action="" method="post" id="create-profile">
+            <div class="grid_6 alpha">
+                <div class="box">
+                    {% set r = guest.client_required %}
+                    <h3>{% trans 'Enter your details below' %}</h3>
+                    <div class="block">
+                        <fieldset>
+                            <legend>{% trans 'Create new profile' %}</legend>
+                            
+                            <label for="name" class="blocklabel">{% trans 'Email Address' %}:</label>
+                            <p class=""><input name="email" class="input_bg" type="text" id="email" value="{{ request.email }}" required id="reg-email"></p>
+                            
+                            <label for="name" class="blocklabel">{% trans 'First Name' %}:</label>
+                            <p class=""><input name="first_name" class="input_bg" type="text" id="first_name" value="{{ request.first_name }}" required></p>
+                            
+                            {% if 'last_name' in r %}
+                            <label for="name" class="blocklabel">{% trans 'Last Name' %}:</label>
+                            <p class=""><input name="last_name" class="input_bg" type="text" id="last_name" value="{{ request.last_name }}" required></p>
+                            {% endif %}
+                            
+                            {% if 'company' in r %}
+                            <label for="name" class="blocklabel">{% trans 'Company' %}:</label>
+                            <p class=""><input name="company" class="input_bg" type="text" id="company" value="{{ request.company }}" required></p>
+                            {% endif %}
+                            
+                            {% if 'birthday' in r %}
+                            <label for="name" class="blocklabel">{% trans 'Birthday' %}:</label>
+                            <p class=""><input name="birthday" class="input_bg" type="text" id="birthday" value=""></p>
+                            {% endif %}
+                            
+                            {% if 'gender' in r %}
+                            <label for="name" class="blocklabel">{% trans 'You are' %}:</label>
+                            <p class=""><select name="gender" class="input_bg">
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    </select></p>
+                            {% endif %}
+                            
+                            <label for="name" class="blocklabel">{% trans 'Password' %}:</label>
+                            <p class=""><input name="password" class="input_bg" type="password" id="reg-password" value="" required></p>
+
+							<label for="name" class="blocklabel">{% trans 'Password confirm' %}:</label>
+                            <p class=""><input name="password_confirm" class="input_bg" type="password" id="password_confirm" value="" required></p>
+                            
+                            {{ mf.recaptcha }}
+
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid_6 omega">
+                <div class="box" id="register-new-account">
+                    <h2>&nbsp;</h2>
+                    <div class="block">
+                        <fieldset>
+                            
+                                {% if 'address_1' in r %}
+                                <p>
+                                    <label>{% trans 'Address' %}: </label>
+                                    <input type="text" name="address_1" value="{{ request.address_1 }}">
+                                </p>
+                                {% endif %}
+                                
+                                {% if 'address_2' in r %}
+                                <p>
+                                    <label>{% trans 'Address 2' %}: </label>
+                                    <input type="text" name="address_2" value="{{ request.address_2 }}">
+                                </p>
+                                {% endif %}
+                                
+                                {% if 'city' in r %}
+                                <p>
+                                    <label>{% trans 'City' %}: </label>
+                                    <input type="text" name="city" value="{{ request.city }}">
+                                </p>
+                                {% endif %}
+                                
+                                {% if 'country' in r %}
+                                <p>
+                                    <label>{% trans 'Country' %}: </label>
+                                    {{ mf.selectbox('country', guest.system_countries, request.country, 0, 'Select country') }}
+                                </p>
+                                {% endif %}
+                                
+                                {% if 'state' in r %}
+                                <p>
+                                    <label>{% trans 'State' %}: </label>
+                                     {# mf.selectbox('state', guest.system_states, request.state, 0, 'Select state') #}
+                                     <input type="text" name="state" value="{{ request.state }}" />
+                                </p>
+                                {% endif %}
+                                
+                                {% if 'postcode' in r %}
+                                <p>
+                                    <label>{% trans 'Zip/Postal Code' %}: </label>
+                                    <input type="text" name="postcode" value="{{ request.postcode }}">
+                                </p>
+                                {% endif %}
+                                
+                                {% if 'phone' in r %}
+                                <p>
+                                    <label>{% trans 'Phone Number' %}: </label>
+                                    <br/>
+                                    <input type="text" name="phone_cc" value="{{ request.phone_cc }}" style="width: 40px"> <input type="text" name="phone" value="{{ request.phone }}" style="width: 233px">
+                                </p>
+                                {% endif %}
+                                <input name="Send" type="submit" value="{% trans 'Register' %}" class="comment_submit" id="send">
+                            
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+            </form>
+        </div>
+    </div>
+
+
+ </div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+$(function() {
+
+    $('#password-reset').bind('submit',function(event){
+        bb.post(
+            'guest/client/reset_password',
+            $(this).serialize(),
+            function(result) {
+                bb.msg('Password reset confirmation email was sent');
+            }
+        );
+        return false;
+    });
+
+    $('#client-login').bind('submit',function(event){
+        bb.post(
+            'guest/client/login',
+            $(this).serialize(),
+            function(result) {
+                bb.redirect();
+            }
+        );
+        return false;
+    });
+
+    $('#create-profile').bind('submit',function(event){
+        bb.post(
+            'guest/client/create',
+            $(this).serialize(),
+            function(result) {
+                //login after registration
+                var login_details = {
+                    email: $('#reg-email').val(),
+                    password: $('#reg-password').val(),
+                };
+                bb.post(
+                    'guest/client/login',
+                    login_details,
+                    function(result) {
+                        bb.redirect();
+                    }
+                );
+            }
+        );
+        return false;
+    });
+
+});
+</script>
+{% endblock %}

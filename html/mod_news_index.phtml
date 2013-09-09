@@ -1,0 +1,26 @@
+{% extends request.ajax ? "layout_blank.phtml" : "layout_default.phtml" %}
+
+{% block meta_title %}{% trans 'Blog'%}{% endblock %}
+
+{% block page_title_up %}{% trans 'News & Announcements' %}
+        <p>{% trans 'Track our latest posts' %}</p>{% endblock %}
+
+{% block content %}
+<ul>
+    {% set posts = guest.news_get_list({"page":request.page,"per_page": 5}) %}
+    {% for i, post in posts.list %}
+    
+       <li><h2><a href="{{ '/blog'|link }}/{{post.slug}}">{{post.title}}</a></h2>
+            {{ post.content|bbmd }}
+            <p class="meta">{{post.updated_at|bb_date}}</p>
+            <a href="{{ '/blog'|link }}/{{post.slug}}" class="small_btn-blk buy_now"><span class="small_blk-blk">{% trans 'Read more..' %}</span></a>
+            <br><br><br><br>
+       </li>
+    {% else %}
+    <p>The list is empty</p>
+    {% endfor %}
+ </ul>
+
+{% include "partial_pagination.phtml" with {'list': posts} %}
+
+{% endblock %}

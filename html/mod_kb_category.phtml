@@ -1,0 +1,28 @@
+{% extends request.ajax ? "layout_blank.phtml" : "layout_default.phtml" %}
+
+{% block meta_title %}{% trans 'Knowledge base' %} - {{category.title}}{% endblock %}
+
+{% block page_title_up %}
+{% trans 'Knowledge base' %} - {{category.title}}
+{% endblock %}
+
+{% block content %}
+<div class="content_left">
+
+<div class="our_support" style="width: 95% !important;">
+<h2>{{category.title}}</h2>
+<p class="meta">{{category.description }}</p><Br />
+
+					<ul class="arrows_list1">
+                    {% for i, article in category.articles %}
+                        <li><a href="{{ '/kb'|link }}/{{article.category.slug}}/{{article.slug}}">{{article.title}}</a></li>
+                    {% endfor %}
+                    </ul>
+                    <div style="clear:both"></div>
+                    <br>
+                    <p><a class="but_minus" href="{{ 'kb'|link }}"><span class="dark-icon i-arrow"></span> {% trans 'Back to list' %}</a></p>
+</div>
+
+    
+</div>
+{% endblock %}

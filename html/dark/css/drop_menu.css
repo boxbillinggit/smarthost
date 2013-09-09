@@ -1,0 +1,61 @@
+@charset "utf-8";
+/* CSS Document */
+
+	#menu li {
+		background:url(../images/nav_divider.png) no-repeat right;
+		float: left;
+		position: relative;
+		margin:0 0 0 0;
+	}
+	#menu li.last {
+		background:none;
+	}
+	#menu ul {
+		margin: 10px 0 0 0 !important;
+		_margin: 0; /*IE6 only*/
+		opacity: 0;
+		visibility: hidden;
+		position: absolute;
+		top: 71px;
+		left: 0;
+		z-index: 1;    
+		background:#393939;
+		-webkit-border-radius: 5px;
+		border-radius: none;
+	}
+
+	#menu li:hover > ul {
+		opacity: 1;
+		visibility: visible;
+		margin: 0;
+	}
+	#menu ul li {
+		float: none;
+		display: block;
+		border: 0;
+		_line-height: 0; /*IE6 only*/
+		-moz-box-shadow: 0 1px 0 #4d4d4d, 0 2px 0 #282828;
+		-webkit-box-shadow: 0 1px 0 #4d4d4d, 0 2px 0 #282828;
+		box-shadow: 0 1px 0 #4d4d4d, 0 2px 0 #282828;
+		
+	}
+	#menu ul li:last-child {   
+		-moz-box-shadow: none;
+		-webkit-box-shadow: none;
+		box-shadow: none;    
+	}
+	#menu ul a {    
+		width: 230px;
+		_height: 10px; /*IE6 only*/
+		display: block;
+		white-space: nowrap;
+		float: none;
+		line-height:50px !important;
+		text-transform: none;
+		border-top:none !important	;
+	}
+	#menu ul a:hover {
+		background-color: #2b2b2b;
+		line-height:46px !important;
+		border-top:solid 4px #f1670b !important;
+	}

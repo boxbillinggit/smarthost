@@ -1,0 +1,170 @@
+{% set company  = guest.system_company %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{% block meta_title %}{% endblock %} {{ settings.meta_title }}</title>
+
+    <meta property="bb:url" content="{{ constant('BB_URL') }}"/>
+    <meta property="bb:client_area" content="{{ '/'|link }}"/>
+    <meta name="keywords" content="{% block meta_keywords %}{{ settings.meta_keywords }}{% endblock %}" />
+	<meta name="description" content="{% block meta_description %}{{ settings.meta_description }}{% endblock %}" />
+    <meta name="robots" content="index, follow" />
+    
+    {{ 'css/smarthost.css' | asset_url | stylesheet_tag }}
+    {{ 'fonts/stylesheet.css' | asset_url | stylesheet_tag }}
+    {{ 'css/editable_buttons.css' | asset_url | stylesheet_tag }}
+    {{ 'css/drop_menu.css' | asset_url | stylesheet_tag }}
+    {{ 'front.css' | asset_url | stylesheet_tag }}
+    {{ 'css/styles.css' | asset_url | stylesheet_tag }}
+    
+    {{ 'css/bootstrap.css' | asset_url | stylesheet_tag }} 
+    {{ 'css/bootstrap-responsive.css' | asset_url | stylesheet_tag }}
+
+	<link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link rel="shortcut icon" type="image/png" href="{{ 'favicon.png' | asset_url }}" />
+    
+    {{ 'jquery.min.js' | asset_url | script_tag }}
+    {{ 'jquery.tipsy.js' | asset_url | script_tag }}
+    {{ 'bb-jquery.js' | asset_url | script_tag }}
+    
+    {{ 'js/shBrushXml.js' | asset_url | script_tag }}
+    {{ 'js/jquery.bxslider2.min.js' | asset_url | script_tag }}
+    {{ 'js/scripts.js' | asset_url | script_tag }}
+    
+
+
+    {% block opengraph %}{% endblock %}
+    {% block head %}{% endblock %}
+    
+    <script type="text/javascript" charset="utf-8">
+		SyntaxHighlighter.all();
+	</script>
+    
+</head>
+<body>
+
+<div id="wrap">
+	<div id="header">
+    	<div class="top_sec">
+        	<div class="container">
+            	<ul>
+                {% if settings.tel == '' %} {% else %}<li class="number">{{ settings.tel }}</li>{% endif %}
+                </ul>
+                
+                
+                
+                
+                
+                <div class="buttons">
+                	{% if settings.live_chat_url == '' %} {% else %}<a class="chat" href="{{ settings.live_chat_url }}"></a>{% endif %}
+                    <div id="container">
+  <div id="topnav" class="topnav"> <a href="#" class="signin"><span></span></a> </div>
+  <fieldset id="signin_menu">
+  {% if not client %}
+  <form  class="api_form" data-api-url="guest/client/login" data-api-redirect="{{ ''|link }}" id="signin">
+      <label for="username">{% trans 'Email Address' %}</label>
+      <input id="email" name="email" value="" title="username" tabindex="4" type="text">
+      </p>
+      <p>
+        <label for="password">{% trans 'Password' %}</label>
+        <input id="password" name="password" value="" title="password" tabindex="5" type="password">
+      </p>
+      <p class="remember">
+        <input id="signin_submit" value="{% trans 'Login' %}" tabindex="6" type="submit">
+        <input id="remember" name="remember" value="1" tabindex="7" type="checkbox">
+        <label for="remember">Remember me</label>
+      </p>
+      <p class="forgot"> <a href="{{ 'reset-password'|link }}" id="resend_password_link">{% trans 'Reset password' %}</a> </p>
+      
+    </form>
+  {% else %}
+	<ul>
+     <li class="trafic">
+        <span><a style="color: #FFF; size:14px;" class="api" href="client/client/logout">{% trans 'Logout' %}</a></span>
+    </li>
+	</ul>
+  {% endif %}
+  </fieldset>
+</div>
+
+
+
+                    
+                </div>
+            </div>
+        </div>
+
+<style>
+a.logo img {
+	width:150px;
+}
+</style>
+<div class="main_bar">
+        	<div class="container">
+        		<a href="{{''|link }}" class="logo">
+                {% if company.logo_url %}
+                    {{ company.logo_url | img_tag }}
+                {% else %}
+                    {{ 'images/logo.png' | asset_url | img_tag }}
+                {% endif %}</a>
+                
+              	<div class="navi">
+                	<ul id="menu">
+							{% include 'menu.phtml' %}
+                    </ul>
+                </div>
+        	</div>
+        </div>
+    </div>
+    <div class="clear"></div>
+    
+{% if guest.system_current_url()==constant('BB_URL') and settings.slider == '1' %}
+{% include "slider.phtml" %}
+{% else %}
+<div id="sub_banner">
+    	<div class="container">
+        	<h1>{% block page_title_up %}{% endblock %}</h1>
+        </div>
+    </div>
+<div class="clear"></div>
+{% endif %}
+
+
+ <div id="sub_content">
+ {% block content_top %}{% endblock %}
+       	<div class="container">
+        
+        <div class="cld_services">
+            	<div class="top_sec"></div>
+                <div class="mid_sec">
+                	<ul>
+                    {% include "partial_menu.phtml" %}
+                    </ul>
+                </div>
+                <img src="{{ 'images/cloud_services_bot.png' | asset_url }}" alt="">
+            </div>
+            
+            <div class="right_text">
+             {% if guest.system_current_url()==constant('BB_URL') and settings.home == '1' %}
+             		{{settings.home_text|raw}}        
+             {% else %}
+             
+             	{% block content_before %}{% endblock %}
+  
+                {% include "partial_message.phtml" %}
+                {% block content %}{% endblock %}
+                {% block content_after %}{% endblock %}
+             
+             {% endif %}
+
+			</div>
+        
+        </div>
+ </div>
+ {% include "footer.phtml" %}
+
+<div class="loading dim" style="display:none"><div class="popup_block"><h3>{% trans 'Loading ..' %}</h3></div></div>
+{% block js %}{% endblock %}
+<noscript>NOTE: Many features on BoxBilling require Javascript and cookies. You can enable both via your browser's preference settings.</noscript>
+    {% include 'mod_cron_check.phtml' %}

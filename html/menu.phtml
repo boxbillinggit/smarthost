@@ -1,0 +1,7 @@
+{% set uri = constant('BB_URL') %}
+
+<li {% if guest.system_current_url()==constant('BB_URL') %}class="selected"{% endif %}><a {% if guest.system_current_url()==constant('BB_URL') %}class="selected"{% endif %} href="/">{% trans 'Home' %}</a></li>
+<li {% if guest.system_current_url()=='support'|link %}class="selected"{% endif %}><a href="{{ 'support'|link }}" {% if guest.system_current_url()=='support'|link %}class="selected"{% endif %}>{% trans 'Support' %}</a></li>
+<li {% if guest.system_current_url() == 'cart'|link %}class="selected"{% endif %}><a {% if guest.system_current_url()=='cart'|link %}class="selected"{% endif %} href="{{ 'cart'|link }}">{% trans 'Shopping cart' %}</a></li>
+<li {% if guest.system_current_url()=='me'|link %}class="selected"{% endif %}><a {% if guest.system_current_url()=='me'|link %}class="selected"{% endif %} href="{{ 'me'|link }}">{% trans 'Profile' %}</a></li>
+<li  {% if guest.system_current_url()=='contact-us'|link %}class="last selected"{% else %}class="last"{% endif %}><a {% if guest.system_current_url()=='contact-us'|link %}class="selected"{% endif %} href="{{ 'contact-us'|link }}">{% trans 'Contact us' %}</a></li>

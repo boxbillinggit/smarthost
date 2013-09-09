@@ -1,0 +1,53 @@
+<div id="logo"><a href="{{''|link }}">
+                {% if company.logo_url %}
+                    {{ company.logo_url | img_tag }}
+                {% else %}
+                    {{ 'images/logo.png' | asset_url | img_tag }}
+                {% endif %}
+            </a></div><!-- end logo -->
+            
+   <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />         
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>          
+  <script>
+  $(document).ready(function() {
+	  $("#login-form-links").click(function () {
+    		$( "#login-form" ).dialog({
+			modal: true,
+			});
+			return false;
+	  });
+  });
+  </script>
+            	
+            <nav id="access" class="access" role="navigation">
+            
+                <div id="menu" class="menu">
+                    <ul class="tiny">
+                    <li><a href="{{ ''|link }}" class="active">{% trans 'Dashboard' %}</a></li>
+                    {% if client %}
+                            <li>
+                                <a href="{{ 'cart'|link }}">{% trans 'Shopping cart' %}</a>
+                            </li>
+                            <li>
+                                <a href="{{ 'me'|link }}">{% trans 'Profile' %}</a>
+                            </li>
+                            <li>
+                                <a href="client/client/logout" class="api">{% trans 'Sign out' %}</a>
+                            </li>
+                    {% else %}
+                    {% block header_buttons %}
+                            <li>
+                                 <a id="login-form-links" class="bb-button bb-button-submit" href="{{ 'login'|link }}">{% trans 'Sign in' %}</a>
+                            </li>
+                            <li>
+                                 <a class="bb-button bb-button-red" href="{{ 'login'|link }}?register=1">{% trans 'Register' %}</a>
+                            </li>
+                    {% endblock %}
+                    {% endif %}
+                    
+                    </ul>
+                    
+                    
+                </div>
+                
+            </nav>

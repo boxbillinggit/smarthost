@@ -1,0 +1,79 @@
+{% extends request.ajax ? "layout_blank.phtml" : "layout_default.phtml" %}
+
+{% block meta_title %}{{email.subject}}{% endblock %}
+
+{% block page_title_up %}
+{{email.subject}}
+{% endblock %}
+
+{% block content %}
+
+<div class="text" style="width:100%">
+
+        <h2>{% trans 'Details' %}</h2>
+
+    <table>
+        <tbody>
+            <tr>
+                <td>{% trans 'From' %}</td>
+                <td>{{email.sender}}</td>
+            </tr>
+
+            <tr>
+                <td>{% trans 'To' %}</td>
+                <td>{{email.recipients}}</td>
+            </tr>
+
+            <tr>
+                <td>{% trans 'Sent' %}</td>
+                <td>{{email.created_at|bb_date}}</td>
+            </tr>
+         </tbody>
+         <tfoot>
+             <tr>
+                 <td colspan="2">
+                 <a href="#" class="small_btn-org table_btn" id="email-resend"><span class="small_blk-org">{% trans 'Resend' %}</span></a>
+                 <a href="#" class="small_btn-org table_btn" id="email-delete" style="margin-left:10px;"><span class="small_blk-org">{% trans 'Delete' %}</span></a>
+                 </td>
+             </tr>
+         </tfoot>
+    </table>
+</div>
+<br><br>
+                    {{email.content_html|raw}}
+           
+           <br>
+           <a href="{{ '/emails'|link }}" class="small_btn-org table_btn"><span class="small_blk-org">{% trans 'Back to emails' %}</span></a>
+
+{% endblock %}
+
+
+{% block js %}
+{% autoescape true js %}
+<script type="text/javascript">
+$(function() {
+    $('#email-resend').click(function(){
+        bb.post(
+            'client/email/resend',
+            {id: {{email.id}} },
+            function(result) {
+                bb.msg('Email resent');
+            }
+        );
+        return false;
+    });
+
+    $('#email-delete').click(function(){
+        bb.post(
+            'client/email/delete',
+            {id: {{email.id}} },
+            function(result) {
+                bb.redirect('{{ 'emails'|link }}');
+            }
+        );
+        return false;
+    });
+});
+</script>
+{% endautoescape %}
+{% endblock %}

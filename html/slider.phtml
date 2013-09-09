@@ -1,0 +1,55 @@
+{% if guest.system_current_url()==constant('BB_URL') %}
+<div id="banner">
+
+<div id="content"><div id="content_inner">
+<style>
+img.man {
+margin:0 !important;	
+}
+</style>
+<ul id="slides1">
+			
+				{% if settings.slider1_text != '' %}
+            	<li>
+                    <div class="content_two">
+                        <img class="man" src="{{settings.slider1_img}}" alt="" border="0" style="width: 948px;margin-top: 1px;margin-bottom: 2px;" />
+                        <div class="text">
+                        <p>{{settings.slider1_text}}</p>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </li>
+            	{% endif %}
+            
+            	{% if settings.slider2_text != '' %}
+            	<li>
+                    <div class="content_two">
+						<img class="man" src="{{settings.slider2_img}}" alt="" border="0" style="width: 948px;margin-top: 1px;margin-bottom: 2px;"/>
+                        <div class="text">
+                        <p>{{settings.slider2_text}}</p>
+                        </div>
+                        <div class="clear"></div>
+                   
+                    </div>
+                </li>
+            	{% endif %}
+                
+                {% if settings.slider3_text != '' %}
+            	<li>
+                    <div class="content_two">
+						<img class="man" src="{{settings.slider3_img}}" alt="" border="0" style="width: 948px;margin-top: 1px;margin-bottom: 2px;" />
+                        <div class="text">
+                        <p>{{settings.slider3_text}}</p>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </li>
+            	{% endif %}
+            
+	</ul>
+</div>
+</div>
+    	
+    </div>
+    <div class="clear"></div>
+{% endif %}

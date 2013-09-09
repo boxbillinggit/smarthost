@@ -1,0 +1,155 @@
+{% extends request.ajax ? "layout_blank.phtml" : "layout_default.phtml" %}
+{% import "macro_functions.phtml" as mf %}
+{% block meta_title %}{% trans 'Contact us' %}{% endblock %}
+
+{% block page_title_up %}
+{% trans 'Contact us' %}
+{% endblock %}
+
+{% block content %}
+{% set company = guest.system_company %}
+
+<div class="info" style="width:250px !important;">
+            	<h1>Info</h1>
+                <Br />
+                <ul class="links">
+                    <li>
+                        {{ company.name }}
+                    </li>
+                    <li>
+                        {{ company.address_1 }}
+                    </li>
+                    <li>
+                        {{ company.address_2 }}
+                    </li>
+                    <li>
+                        {{ company.address_3 }}
+                    </li>
+                    <li>
+                        {{ company.tel }}
+                    </li>
+                    <li>
+                        {{ company.www }}
+                    </li>
+                    <li>
+                        {{ company.email }}
+                    </li>
+                </ul>
+            </div>
+
+
+<div class="form">
+            	<h1>{% trans 'Contact us' %}</h1>
+                <div id="div_success"></div>
+                              <div id="error" class="warning" style="display:none;"></div>
+					<form name="form" id="public-ticket-create" method="post" action="#" onsubmit="return false;">    
+                 <div class="field">
+             	<label>{% trans 'Name' %}:</label>
+                        <input name="name" id="name" type="text" value="{{request.name}}">
+                    </div>
+                     <div class="field">
+                    	<label>{% trans 'Email' %}:</label>
+                        <input name="email" id="email" type="text" value="{{request.email}}">
+                    </div>
+                    <div class="field">
+                    	<label>{% trans 'Subject' %}:</label>
+                        <input name="subject" id="subject" type="text" value="{{request.subject}}">
+                    </div>
+                    <div class="field">
+                    	<label>Message:</label>
+                        <textarea name="message" id="message" cols="" rows="">{{request.message}}</textarea>
+                    </div>
+                    {{ mf.recaptcha }}
+                    <input type="hidden" name="anti-spam" value="1" id="anti-spam" required/>
+				 <input type="submit" class="btn-org banner_btn contact" name="Submit" id="Submit" onclick="contact();" value="">
+				 
+				<!-- 
+                <a href="#." class="btn-org banner_btn contact" ><span class="blk-org">submit</span></a>-->
+                
+               </form> 
+                
+            </div>
+{% endblock %}
+
+{% block js %}
+<script >
+function contact()
+{
+	document.getElementById("div_success").style.display = "none";
+	document.getElementById("div_success").innerHTML = "";
+	document.getElementById("error").style.display = "none";
+	document.getElementById("error").innerHTML = "";
+	var name 				= document.getElementById("name");
+	var email 				= document.getElementById("email");
+	var phone				= document.getElementById("phone");	
+	var message				= document.getElementById("message");			
+	var errors = "";
+
+	if(name.value=="")
+	{
+		errors+= 'Please provide your name.<br />';
+	}
+	else if(phone.value == "")
+	{
+		errors+= 'Please provide a phone no.<br />';
+	}
+	else if(isNaN(phone.value))
+	{
+		errors+= 'Please provide valid phone no.<br />';
+	}
+else if(email.value=="")
+
+	{
+		errors+= 'Please provide an email.<br />';
+	}	
+
+	else if(checkcontact(email.value)==false) 
+	{
+		errors+= 'Please provide a valid  email.<br />';
+	}
+	else if(message.value=="")
+	{
+		errors+= 'Please provide a message.<br />';
+	}
+
+	if(errors)
+	{	
+		document.getElementById("error").style.display = "block";
+		document.getElementById("error").innerHTML = errors;
+	} 
+	else 
+	{	
+		document.form.submit();
+	}
+}
+function checkcontact(input)
+{
+	var pattern1=/^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
+	if(pattern1.test(input))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+</script>
+
+<script type="text/javascript">
+$(function() {
+    $('#anti-spam').remove();
+
+    $('#public-ticket-create').bind('submit',function(event){
+        bb.post(
+            'guest/support/ticket_create',
+            $(this).serialize(),
+            function(result) {
+                bb.redirect('{{ 'contact-us/conversation'|link }}' + '/' + result);
+            }
+        );
+        return false;
+    });
+});
+</script>
+{% endblock %}

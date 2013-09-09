@@ -1,0 +1,72 @@
+    {% if not client %}
+    <li class="trafic">
+       <span><a style="color: #434343; size:14px;" href="{{ ''|link }}">{% trans 'Home' %}</a></span>
+    </li>
+    {% endif %}
+    <li class="trafic">
+        <span><a style="color: #434343; size:14px;" href="{{ '/order'|link }}">{% trans 'Order' %}</a></span>
+    </li>
+
+    {% if guest.extension_is_on({"mod":"news"}) %}
+    <li class="trafic">
+       <span><a style="color: #434343; size:14px;" href="{{ '/blog'|link }}">{% trans 'Blog' %}</a></span>
+    </li>
+    {% endif %}
+    
+    {% if guest.extension_is_on({"mod":"kb"}) %}
+    <li class="trafic">
+        <span><a style="color: #434343; size:14px;" href="{{ '/kb'|link }}">{% trans 'Knowledge Base' %}</a></span>
+    </li>
+    {% endif %}
+
+    {% if guest.extension_is_on({"mod":"forum"}) %}
+    <li class="trafic">
+        <span><a style="color: #434343; size:14px;" href="{{ '/forum'|link }}">{% trans 'Forum' %}</a></span>
+    </li>
+    {% endif %}
+    
+    {% if guest.extension_is_on({"mod":"opinieklientow"}) %}
+    <li class="trafic">
+        <span><a style="color: #434343; size:14px;" href="{{ '/opinie'|link }}">{% trans 'Opinie Klientów' %}</a></span>
+    </li>
+    {% endif %}
+    
+    <li class="trafic">
+        <span><a style="color: #434343; size:14px;" href="{{ '/contact-us'|link }}">{% trans 'Contact us' %}</a></span>
+    </li>
+
+    {% if client %}
+    <li class="trafic">
+        <span><a style="color: #434343; size:14px;" href="{{ '/support'|link }}">{% trans 'Support' %}</a></span>
+-    </li>
+    <li class="trafic">
+        <span><a style="color: #434343; size:14px;" href="{{ '/service'|link }}">{% trans 'Services' %}</a></span>
+    </li>
+    
+    <li class="trafic">
+        <span><a style="color: #434343; size:14px;" href="{{ '/invoice'|link }}">{% trans 'Invoices' %}</a></span>
+    </li>
+    <li class="trafic">
+        <span><a style="color: #434343; size:14px;" href="{{ '/emails'|link }}">{% trans 'Emails' %}</a></span>
+    </li>
+
+    <li class="trafic">
+        <span><a style="color: #434343; size:14px;" href="{{ '/balance'|link }}">{% trans 'Payment history' %}</a></span>
+    </li>
+    
+    {#
+    <li class="trafic">
+        <span><a style="color: #434343; size:14px;" href="{{ '/me'|link }}">{% trans 'Profile' %}</a></span>
+    </li>
+
+    <li class="trafic">
+        <span><a style="color: #434343; size:14px;" href="client/client/logout">{% trans 'Logout' %}</a></span>
+    </li>
+    #}
+    {% else %}
+    {#
+    <li class="trafic">
+        <span><a style="color: #434343; size:14px;" href="{{ '/login'|link }}">{% trans 'Sign in / Register' %}</a></span>
+    </li>
+    #}
+    {% endif %}

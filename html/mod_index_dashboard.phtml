@@ -1,0 +1,281 @@
+{% extends request.ajax ? "layout_blank.phtml" : "layout_default.phtml" %}
+
+{% block meta_title %}{% trans 'Client Area' %}{% endblock %}
+{% import "macro_functions.phtml" as mf %}
+{% block page_title_up %}{% trans 'Client Area' %}{% endblock %}
+
+{% block content %}
+<div class="content_left">
+{% if client %}
+
+{% set tickets = client.support_ticket_get_list({"status":'on_hold'}) %}
+{% if tickets.total > 0 %}
+<h2>{% trans 'Tickets waiting your reply' %}</h2>
+<div class="domains"> 
+ <div class="gray">
+                    	<span class="title" style="width: 40px !important;">{% trans 'Id' %}</span>
+                        <span class="title">{% trans 'Subject' %}</span>
+                        <span class="title">{% trans 'Help desk' %}</span>
+                        <span class="title" style="width: 80px !important;">{% trans 'Status' %}</span>
+                        <span class="title" style="width: 80px !important;">{% trans 'Submitted' %}</span>
+                        <div class="clear"></div>
+                    </div>
+
+
+                {% for i, ticket in tickets.list %}
+
+					<div class="{{ cycle(['light', 'dark'], i) }}">
+                    	<span class="detail" style="width: 40px !important;">#{{ticket.id}}</span>
+                        <span class="detail"><a href="{{ 'support/ticket'|link }}/{{ticket.id}}">{{ticket.subject|truncate(40)}}</a></span>
+                        <span class="detail">{{ticket.helpdesk.name}}</span>
+                        <span class="detail" style="width: 80px !important;">{{mf.status_name(ticket.status)}}</span>
+                        <span class="detail last" style="width: 80px !important;">{{ticket.created_at|timeago}}</span>
+                        <div class="clear"></div>
+                    </div>
+                    
+                {% else %}
+
+                <div class="light">
+                    <span style="width:100%;">{% trans 'The list is empty' %}</span>
+                </div>
+
+                {% endfor %}
+				</div>
+            
+            </div>
+{% endif %}
+
+{% set profile = client.client_get %}
+<div class="text">
+            <h2>{% trans 'Profile' %}</h2>
+            
+        <table width="100%;">
+            <tbody>
+                <tr>
+                    <td>{% trans 'ID' %}</td>
+                    <td>#{{ profile.id }}</td>
+                </tr>
+                <tr>
+                    <td>{% trans 'Email' %}</td>
+                    <td>{{ profile.email }}</td>
+                </tr>
+                <tr>
+                    <td>{% trans 'Balance' %}</td>
+                    <td>{{ profile.balance | money(profile.currency) }}</td>
+                </tr>
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <td colspan="2">
+                    <br>
+                        <a href="{{ 'me'|link }}" class="btn-grn faq_btn"><span class="blk-grn">{% trans 'Manage profile' %}</span></a>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+                </div>
+
+<div class="text last">
+            <h2>{% trans 'Invoices' %}</h2>
+        <table width="100%;">
+            <tbody>
+                <tr>
+                    <td>{% trans 'Total' %}</td>
+                    <td>{{ client.invoice_get_list().total }}</td>
+                </tr>
+                <tr>
+                    <td>{% trans 'Paid' %}</td>
+                    <td>{{ client.invoice_get_list({"status":"paid"}).total }}</td>
+                </tr>
+                <tr>
+                    <td>{% trans 'Unpaid' %}</td>
+                    <td>{{ client.invoice_get_list({"status":"unpaid"}).total }}</td>
+                </tr>
+            </tbody>
+
+            <tfoot width="100%;">
+                <tr>
+                    <td colspan="2">
+                    <br>
+                    <a href="{{ 'invoice'|link }}" class="btn-grn faq_btn"><span class="blk-grn">{% trans 'All Invoices' %}</span></a>
+                    
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+</div>
+
+<div class="clearfix mar_top3" style="padding-bottom: 10px;"></div>
+
+<div class="text">
+<br />
+            <h2>{% trans 'Services' %}</h2>
+        <table width="100%;">
+            <tbody>
+                <tr>
+                    <td>{% trans 'Total' %}</td>
+                    <td>{{ client.order_get_list({"hide_addons":1}).total }}</td>
+                </tr>
+                <tr>
+                    <td>{% trans 'Active' %}</td>
+                    <td>{{ client.order_get_list({"hide_addons":1, "status":"active"}).total }}</td>
+                </tr>
+                <tr>
+                    <td>{% trans 'Soon expires' %}</td>
+                    <td>{{ client.order_get_list({"expiring":1}).total }}</td>
+                </tr>
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <td colspan="2">
+                    <br>
+                    <a href="{{ 'service'|link }}" class="small_btn-grn buy_now"><span class="small_blk-grn">{% trans 'All services' %}</span></a>
+                    <a href="{{ 'order'|link }}" class="small_btn-grn buy_now" style="margin-left:5px;"><span class="small_blk-grn">{% trans 'New order' %}</span></a>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+</div>
+
+<div class="text last">
+<br />
+            <h2>{% trans 'Tickets' %}</h2>
+        <table width="100%;">
+            <tbody>
+                <tr>
+                    <td>{% trans 'Total' %}</td>
+                    <td>{{ client.support_ticket_get_list().total }}</td>
+                </tr>
+                <tr>
+                    <td>{% trans 'Open' %}</td>
+                    <td>{{ client.support_ticket_get_list({"status":'open'}).total }}</td>
+                </tr>
+                <tr>
+                    <td>{% trans 'On Hold' %}</td>
+                    <td>{{ client.support_ticket_get_list({"status":'on_hold'}).total }}</td>
+                </tr>
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <td colspan="2">
+                    <br>
+                    <a href="{{ 'support'|link }}" class="small_btn-grn buy_now"><span class="small_blk-grn">{% trans 'All tickets' %}</span></a>
+                    <a href="{{ 'support'|link }}?ticket=1" class="small_btn-grn buy_now" style="margin-left:5px;"><span class="small_blk-grn">{% trans 'New ticket' %}</span></a>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+</div>
+
+<div class="clearfix mar_top3" style="padding-bottom: 10px;"></div>
+
+<div class="text">
+<br />
+            <h2>{% trans 'Recent orders' %}</h2>
+        <table width="100%;">
+            <tbody>
+                {% for i, order in client.order_get_list({"per_page":5, "page":request.page, "hide_addons":1}).list %}
+                <tr class="{{ cycle(['odd', 'even'], i) }}">
+                    <td><a href="{{ 'service/manage'|link }}/{{order.id}}">{{ order.title|truncate(30) }}</a></td>
+                    <td>{{ mf.status_name(order.status) }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3">{% trans 'The list is empty' %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+</div>
+
+<div class="text last">
+<br />
+            <h2>{% trans 'Recent emails' %}</h2>
+        <table width="100%;">
+            <tbody>
+                {% for i, email in client.email_get_list({"per_page":5}).list %}
+                <tr class="{{ cycle(['odd', 'even'], i) }}">
+                    <td><a href="{{ 'email'|link }}/{{email.id}}">{{email.subject|truncate(30)}}</a></td>
+                    <td title="{{ email.created_at|bb_date }}">{{ email.created_at|timeago }} {% trans 'ago' %}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="2">{% trans 'The list is empty' %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+</div>
+<div class="clear"></div>
+
+{% else %}
+
+<div class="text">
+            <h3>{% trans 'Order' %}</h3>
+            <p>{% trans 'Order products and services' %}</p><Br>
+            <a href="{{ '/order'|link }}" class="small_btn-blk buy_now"><span class="small_blk-blk">{% trans 'Order' %}</span></a>
+</div>
+
+<div class="text last">
+            <h3>{% trans 'Register' %}</h3>
+            <p>{% trans 'Become a member and manage services' %}</p><br>
+            <a href="{{ '/login'|link }}?register=1" class="small_btn-blk buy_now"><span class="small_blk-blk">{% trans 'Register' %}</span></a>
+</div>
+
+<div class="clearfix mar_top3"></div>
+
+<div class="text">
+<Br />
+            <h3>{% trans 'Contact Us' %}</h3>
+            <p>{% trans 'Contact us for more information' %}</p><br>
+            <a href="{{ '/contact-us'|link }}" class="small_btn-blk buy_now"><span class="small_blk-blk">{% trans 'Contact Us' %}</span></a>
+</div>
+
+{% if guest.extension_is_on({"mod":"news"}) %}
+<div class="text last">
+<br />
+            <h3>{% trans 'Announcements' %}</h3>
+            <p>{% trans 'Latest news & announcements' %}</p><br>
+            <a href="{{ '/blog'|link }}" class="small_btn-blk buy_now"><span class="small_blk-blk">{% trans 'Announcements' %}</span></a>
+</div>
+{% endif %}
+
+ <div class="clearfix mar_top3"></div>
+ 
+{% if guest.extension_is_on({"mod":"kb"}) %}
+<div class="text">
+<Br />
+            <h3>{% trans 'Knowledge Base' %}</h3>
+            <p>{% trans 'Browse our KB for answers and FAQs' %}</p><br>
+            <a href="{{ '/kb'|link }}" class="small_btn-blk buy_now"><span class="small_blk-blk">{% trans 'Knowledge Base' %}</span></a>            
+</div>   
+{% endif %}
+    
+
+    <div class="clear"></div>
+{% endif %}
+</div>
+{% endblock %}
+
+
+{% block js %}
+<script type="text/javascript">
+$(function() {
+
+    $('#client-login').bind('submit',function(event){
+        bb.post(
+            'guest/client/login',
+            $(this).serialize(),
+            function(result) {
+                bb.redirect();
+            }
+        );
+        return false;
+    });
+
+});
+</script>
+{% endblock %}
