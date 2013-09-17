@@ -4,7 +4,8 @@ SmartHost_template
 
 Install
 
-Upload folder SmartHost_template to bb-themes/ and rename to smarthost
+Upload folder smarthost to bb-themes/
+Login to CP settings->theme-> set smarthost to default
 
 Author: http://www.boxbilling.com.pl/
 Donate: http://www.boxbilling.com.pl/donate.php
